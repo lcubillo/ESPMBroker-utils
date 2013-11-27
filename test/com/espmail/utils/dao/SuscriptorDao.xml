@@ -1,0 +1,42 @@
+<dao>
+	<metodo nombre="guardar" params="suscriptor">
+		update miembros
+		   set nombre = #suscriptor.nombre#,
+		       password = crypto.cifrar(#suscriptor.password#),
+		       email = #suscriptor.mail#,
+		       listas = #suscriptor.listas#,
+		       pai_cod = #suscriptor.pais#
+	     where cod = #suscriptor.codigo#		   
+	</metodo>
+	<metodo nombre="guardarFallo" params="suscriptor">
+		update miembros
+		   set nombre = #suscriptor.nombre#,
+		       password = crypto.cifrar(#suscriptor.password#),
+		       email = #suscriptor.mail#,
+		       lista = #suscriptor.listas#,
+		       pai_cod = #suscriptor.pais#
+	     where cod = #suscriptor.codigo#		   
+	</metodo>
+	<metodo nombre="insert" params="suscriptor">
+	insert into miembros(nombre ,password ,email,listas,pai_cod,cod,
+			fec_inscrip,ip_registro,admite_html,aso_cod,idioma)
+		   	values (#suscriptor.nombre#,crypto.cifrar(#suscriptor.password#),
+	   		#suscriptor.mail#,#suscriptor.listas#,#suscriptor.pais#,
+	   		#suscriptor.codigo#,sysdate,'127.0.0.1','S','123654','E')
+	</metodo>
+	<metodo nombre="eliminar" params="cod">
+		delete form miembros where cod = #cod#
+	</metodo>
+	
+	<metodo nombre="findByCodigo" params="cod">
+		select cod, nombre, crypto.descifrar(password), email, fec_inscrip, listas, pai_cod
+		  from miembros
+		 where cod = #cod#
+	</metodo>
+	<metodo nombre="find" params="lista, pais">
+		select cod, nombre, crypto.descifrar(password), email, fec_inscrip, listas, pai_cod
+		  from miembros
+		 where listas like '%' || #lista# || '%'
+		   and pai_cod = #pais#
+	</metodo>
+</dao>

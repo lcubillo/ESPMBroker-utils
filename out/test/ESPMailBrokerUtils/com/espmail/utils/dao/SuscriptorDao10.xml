@@ -1,0 +1,7 @@
+<dao>
+		<metodo nombre="findByCodigo" params="codigo">
+		select cod, nombre, crypto.descifrar(password), email, fec_inscrip, listas, pai_cod
+		  from miembros
+		 where cod = #codigos#
+	</metodo>
+</dao>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ESPMailUtils" default="all" basedir=".">
+    <description>Builds, tests, and runs the project Utils.</description>
+
+    <target name="init">
+        <property file="build.properties"/>
+
+        <path id="compile.classpath">
+            <fileset dir="${lib.home}" includes="*.jar"/>
+        </path>
+    </target>
+
+    <target name="clean" depends="init">
+        <delete dir="${build.home}"/>
+    </target>
+
+    <target name="copy" depends="init">
+        <mkdir dir="${build.home}" />
+        <mkdir dir="${build.classes}" />
+        <copy todir="${build.classes}">
+        	<fileset dir="${src.home}" includes="**/*.properties"/>
+        	<fileset dir="${src.home}" includes="**/*.xml"/>
+        	<fileset dir="${src.home}" includes="**/*.tld"/>
+        </copy>
+    </target>
+
+    <target name="compile" depends="copy">
+        <javac srcdir="${src.home}" destdir="${build.classes}"
+               classpathref="compile.classpath" debug="true" source="1.6"
+	           target="1.6"/>
+    </target>
+
+    <target name="jar" depends="compile">
+		<jar destfile="${build.home}/ESPMailUtils-${version}.jar" basedir="${build.classes}"/>
+	</target>
+
+    <target name="all" depends="clean, jar"/>
+</project>

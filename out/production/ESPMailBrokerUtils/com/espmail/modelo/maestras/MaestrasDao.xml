@@ -1,0 +1,62 @@
+<dao>
+	<metodo nombre="damePaises">
+		select paises.cod,paises.nombre,paises.nombre_p, decode(pai_cod, null, 'false', 'true'),paises.idioma 
+		  from paises, 
+			   (select distinct pai_cod
+			      from provincias
+			     where pai_cod != cod) v
+	 	 where paises.cod = v.pai_cod(+)
+		   and cod != 'NOP'
+		 order by nombre
+	</metodo>
+	<metodo nombre="damePaisesIdioma" params="idioma">
+		select paises.cod,paises.nombre,paises.nombre_p, decode(pai_cod, null, 'false', 'true'),paises.idioma 
+		  from paises, 
+			   (select distinct pai_cod
+			      from provincias
+			     where pai_cod != cod) v
+	 	 where paises.cod = v.pai_cod(+)
+		   and cod != 'NOP' and paises.idioma = #idioma#
+		 order by nombre
+	</metodo>
+	<metodo nombre="dameCategorias">
+		 select cod, nombre, nombre_p
+		   from categorias,
+		        (select distinct cat_cod
+				   from listas, propietario_listas
+				  where listas.cod = propietario_listas.lis_cod
+				    and listas.borrado = 'N'
+					and propietario_listas.borrar = 'N'
+					and aso_cod = 'aspmail.com'
+				    and listas.cod != 2420)
+		  where cod = cat_cod
+		  order by orden
+	</metodo>
+	<metodo nombre="dameListas">
+		select cod, nombre, nombre_p, cat_cod
+		  from listas, propietario_listas
+		 where listas.cod = propietario_listas.lis_cod
+		   and listas.borrado = 'N'
+		   and propietario_listas.borrar = 'N'
+		   and aso_cod = 'aspmail.com'
+		   and listas.cod != 2420
+		 order by orden
+	</metodo>
+	<metodo nombre="dameSectores">
+		select cod, nombre, nombre_p
+		  from sectores
+		 where cod != '99'
+		 order by nombre
+	</metodo>
+	<metodo nombre="dameOcupaciones">
+		select cod, nombre, nombre_p
+		  from ocupaciones
+		 where cod != '99'
+		 order by nombre
+	</metodo>
+	<metodo nombre="findCategoriasRedes">
+		select etiqueta,tags,i18n
+		  from categorias_red
+		 order by etiqueta
+	</metodo>
+</dao>

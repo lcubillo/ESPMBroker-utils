@@ -1,0 +1,5 @@
+<dao>
+		<metodo nombre="findByCodigo" params="codigo">
+		
+	</metodo>
+</dao>

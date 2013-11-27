@@ -1,0 +1,8 @@
+<dao>
+	<metodo nombre="get" params="codigo">
+		select cod, valor_num, valor_fec, 
+			   nvl(valor_char, to_char(valor_clob)), nvl(valor_char_p, to_char(valor_clob_p))
+		  from parametros
+		 where cod = #codigo#
+	</metodo>
+</dao>

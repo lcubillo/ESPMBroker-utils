@@ -1,0 +1,71 @@
+<dao>
+	<metodo nombre="get" params="email">
+		select cod, password, crypto.descifrar(password), nombre, apellidos, email, movil, sexo, cp, 
+			   fec_ncto, pai_cod, pro_cod, ocu_cod, sec_cod, listas,
+			   idioma, nombreweb, red, aso_cod, asociados, 
+			   to_char(fec_inscrip, 'dd/MM/yyyy hh:mm:ss'),
+			   to_char(fec_ult_login, 'dd/MM/yyyy hh:mm:ss'),			  
+			   ip_confir,
+			   ip_registro
+		  from miembros
+		 where email = #email#		 		
+	</metodo>
+   <metodo nombre="findbycod" params="codigo">
+		select cod, password, crypto.descifrar(password), nombre, apellidos, email, movil, sexo, cp,
+			   fec_ncto, pai_cod, pro_cod, ocu_cod, sec_cod, listas,
+			   idioma, nombreweb, red, aso_cod, asociados,
+			   to_char(fec_inscrip, 'dd/MM/yyyy hh:mm:ss'),
+			   to_char(fec_ult_login, 'dd/MM/yyyy hh:mm:ss'),
+			   ip_confir,
+			   ip_registro
+		  from miembros
+		 where cod = #codigo#		 		
+	</metodo>
+   <metodo nombre="save" params="s">
+		call reubicar_miembro(#s.codigo#, #s.pais#);
+		update miembros
+		   set nombre = #s.nombre#, apellidos = #s.apellidos#,
+		       movil = #s.movil#, sexo = #s.sexo#,
+		       cp = #s.cp#, idioma = #s.idioma#, fec_ncto = #s.fechaNacimiento#,
+			   dw_ano_ncto = to_char(#s.fechaNacimiento#, 'yyyy'),
+			   pro_cod = #s.provincia#,
+			   ocu_cod = #s.ocupacion#, sec_cod = #s.sector#,
+			   listas = #s.listas#
+		 where email = #s.email#
+	</metodo>
+	<metodo nombre="delete" params="codigo, codigoPedido, causa">
+		delete from miembros
+		 where cod = #codigo#;
+		insert into pedidos_bajas (ped_cod, mie_cod, fecha, causa)
+		select #codigoPedido#, #codigo#, sysdate, #causa#
+		  from dual
+		 where #codigoPedido# is not null
+	</metodo>
+   <metodo nombre="deleteSus" params="codigo">
+      delete from miembros
+      where cod=#codigo#
+   </metodo>
+   <metodo nombre="noDeseado" params="codigo, email, codigoPedido">
+		insert into no_deseados (ped_cod, mie_cod, fecha, email, procedencia)
+		values (#codigoPedido#, #codigo#, sysdate, #email#, 'U')
+	</metodo>
+	<metodo nombre="findHistorico" params="email">
+		select fec_inscrip "inscripcion",fecha_baja "fechabaja", red "red", nombre "nombre",
+		       apellidos "apellidos", ip_registro "ip", aso_cod "webmaster"		       
+		  from miembros_borrados
+		 where email = #email#
+	</metodo>
+	<metodo nombre="updateSuscripcion" params="ip, codigo">
+		update miembros 
+		set ip_confir = #ip#, fec_confir = SYSDATE  
+		where cod = #codigo#
+	</metodo>
+     <metodo nombre="confirmSuscripcion" params="email, asocod, red">
+        insert into confirmaciones_tracking  (email, aso_cod, red, fecha)
+        values(#email#,#asocod#,#red#, sysdate)
+     </metodo>
+     <metodo nombre="getPasswordAbierta" params="email">
+        call get_password(#email#)
+     </metodo>
+
+</dao>

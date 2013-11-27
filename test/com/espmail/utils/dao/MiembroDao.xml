@@ -1,0 +1,29 @@
+<dao>
+	<metodo nombre="codigos" params="suscriptor">
+		select cod,email,fec_confir from miembros where cod=#suscriptor#
+	</metodo>
+	<metodo nombre="codigo" params="codigo">
+		select cod from miembros where cod=#codigo#
+	</metodo>
+	<metodo nombre="dameCodigoBean" params="codigo">
+		select cod from miembros where cod=#codigo.codigo#
+	</metodo>
+	<metodo nombre="codigoSinParametros">
+		select cod from miembros where cod=20130956
+	</metodo>
+	<metodo nombre="dameEmail" params="codigo">
+		select email from miembros where cod=#codigo#
+	</metodo>
+	<metodo nombre="dameEmails" params="cadena">
+		select cod,email,fec_confir from miembros where email like #cadena# || '%'
+	</metodo>
+	<metodo nombre="dameArraySimple" params="cadena">
+		select email from miembros where email like #cadena# || '%'
+	</metodo>
+	<metodo nombre="dameFecha" params="cadena">
+		select fec_confir from miembros where email like #cadena# || '%'
+	</metodo>
+	<metodo nombre="dameCodigos" params="cadena">
+		select cod from miembros where email like #cadena# || '%'
+	</metodo>
+</dao>
